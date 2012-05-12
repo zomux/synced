@@ -17,7 +17,7 @@ def fetch(params):
   wp = Client(params["xmlrpc_url"], params["username"], params["password"])
   if not wp:
     return None
-  wpposts = wp.call(posts.GetPosts({"number":30,"post_status":"publish"}))
+  wpposts = wp.call(posts.GetPosts({"number":50,"post_status":"publish"}))
   if not wpposts:
     return None
   list_items = []

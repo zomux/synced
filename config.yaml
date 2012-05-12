@@ -1,69 +1,13 @@
 - mode: forward_by_title
   source: 
     service: evernote
-    shared_url: "https://www.evernote.com/pub/zomux/anotemydiary" 
+    shared_url: "https://www.evernote.com/pub/user/notebook" 
 
   target:
     service: wordpress
-    xmlrpc_url: "http://rafa.blog.cd/xmlrpc.php"
-    username: "rafa"
-    password: "zxczxc"
+    xmlrpc_url: "http://yourwordpressblog.com/xmlrpc.php"
+    username: "yourname"
+    password: "xxxxxxxx"
     title: "{title}"
     content: "{content}"
     categories: "dairy"
-
-- mode: forward_by_title
-  source: 
-    service: evernote
-    shared_url: "https://www.evernote.com/pub/zomux/anotemyidea" 
-
-  target:
-    service: wordpress
-    xmlrpc_url: "http://rafa.blog.cd/xmlrpc.php"
-    username: "rafa"
-    password: "zxczxc"
-    title: "{title}"
-    content: "{content}"
-    categories: "idea"
-
-- mode: forward_by_title
-  source: 
-    service: evernote
-    shared_url: "https://www.evernote.com/pub/zomux/anotestudy" 
-
-  target:
-    service: wordpress
-    xmlrpc_url: "http://rafa.blog.cd/xmlrpc.php"
-    username: "rafa"
-    password: "zxczxc"
-    title: "{title}"
-    content: "{content}"
-    categories: "Study"
-
-- mode: forward_by_title
-  source: 
-    service: evernote
-    shared_url: "https://www.evernote.com/pub/zomux/anotework" 
-
-  target:
-    service: wordpress
-    xmlrpc_url: "http://rafa.blog.cd/xmlrpc.php"
-    username: "rafa"
-    password: "zxczxc"
-    title: "{title}"
-    content: "{content}"
-    categories: "General Work"
-
-- mode: forward_by_title
-  source: 
-    service: evernote
-    shared_url: "https://www.evernote.com/pub/zomux/anotesmt" 
-
-  target:
-    service: wordpress
-    xmlrpc_url: "http://rafa.blog.cd/xmlrpc.php"
-    username: "rafa"
-    password: "zxczxc"
-    title: "{title}"
-    content: "{content}"
-    categories: "NLP"
