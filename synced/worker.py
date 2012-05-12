@@ -94,6 +94,8 @@ class Worker:
         value = value.replace("{%s}" % kitem,kvalue)
       params[key] = value
     return params
+  def cleanTitle(self,title):
+    return re.sub(r'<(.*)>', r'\1', title)
 
   def forward_by_title(self):
     fetch_source = getattr(self.moduleSource,"fetch")
@@ -107,14 +109,16 @@ class Worker:
     # to limit items to post , the forward_by_title will run under control
     items_source = items_source[:len(items_target)/2]
     items_source.reverse()
-    titles_target = [x["title"] for x in items_target]
+    titles_target = [self.cleanTitle(x["title"]) for x in items_target]
     for item in items_source:
-      if item["title"] not in titles_target:
+      title = self.cleanTitle(item["title"])
+      item["title"] = title
+      if title not in titles_target:
         if enhance_source:
           item = enhance_source(item)
         params_target = self.buildTargetParams(item)
         retPost = post_target(params_target)
-        print "POST:",item["title"]
+        print "POST:",title
         print "RETURN:",retPost
         
     return True
