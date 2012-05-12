@@ -17,7 +17,7 @@ def fetch(params):
   wp = Client(params["xmlrpc_url"], params["username"], params["password"])
   if not wp:
     return None
-  args = {"numberposts":50,"post_status":"publish"}
+  args = {"numberposts":20,"post_status":"publish"}
   
   if "categories" in params:
     args["categories"] = params["categories"]
