@@ -29,7 +29,7 @@ def fetch(params):
   for wppost in wpposts:
     list_items.append({"id":wppost.id,"title":wppost.title,
                        "content":wppost.content,"date":wppost.date_modified,
-                       "link":wppost.link})
+                       "link":wppost.link,"obj":wppost})
   return list_items
   
 def enhance(item):
@@ -59,7 +59,23 @@ def post(params):
   return True
 
 def edit(params):
-  pass
+  require_params(params,["xmlrpc_url","username","password","item","content"])
+  item = params["item"]
+  if "obj" not in item:
+    print "[Wordpress] not found obj in item"
+  post = item["obj"]
+  if "title" in params:
+    post.title = params["title"]
+  if "content" in params:
+    post.content = params["content"]
 
-__all__ = ["post","fetch"]
+  wp = Client(params["xmlrpc_url"], params["username"], params["password"])
+  if not wp:
+    return None
+    
+  return wp.call(posts.EditPost(post.id,post))
+  
+
+
+__all__ = ["post","fetch","edit"]
 

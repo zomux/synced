@@ -3,6 +3,9 @@ from functions import *
 import inspect
 import sys
 import re
+import datetime
+
+import dateutil.parser
 
 
 class Worker:
@@ -45,14 +48,14 @@ class Worker:
     # check if the service provides action we require
     if len(set(actions_required)-set(module.__all__)) > 0:
       print "More Actions require for the '%s' than it provides" % service
-      print "Need %s" % ",".list(set(actions_required)-set(module.__all__))
+      print "Need %s" % ",".join(list(set(actions_required)-set(module.__all__)))
       return None
     ret = module
     # check if we have enough params to run the actions in service
     for action in actions_required:
       func = getattr(module,action)
       params_required = self.getRequiredParamsFromFunction(func)
-      params_not_given = set(params_required) - set(params)
+      params_not_given = set(params_required) - set(params) - set(["item"])
       if len(params_not_given):
         print "Error: required parameters for '%s' not found:" % service ,
         print ",".join( params_not_given )
@@ -121,6 +124,59 @@ class Worker:
         print "POST:",title
         print "RETURN:",retPost
         
+    return True
+
+  def sync_by_title_date(self):
+    fetch_source = getattr(self.moduleSource,"fetch")
+    enhance_source = None
+    if "enhance" in self.moduleSource.__all__:
+      enhance_source = getattr(self.moduleSource,"enhance")
+    fetch_target = getattr(self.moduleTarget,"fetch")
+    post_target = getattr(self.moduleTarget,"post")
+    edit_target = getattr(self.moduleTarget,"edit")
+    items_source = fetch_source(self.source)
+    items_target = fetch_target(self.target)
+    # to limit items to post , the sync_by_title_date will run under control
+    items_source = items_source[:len(items_target)+1]
+    items_source.reverse()
+    
+    map_title_target = {}
+    for item_target in items_target:
+      map_title_target[self.cleanTitle(item_target["title"])] = item_target
+
+    for item in items_source:
+      title = self.cleanTitle(item["title"])
+      item["title"] = title
+      if title not in map_title_target:
+        # post for unfound post
+        if enhance_source:
+          item = enhance_source(item)
+        params_target = self.buildTargetParams(item)
+        retPost = post_target(params_target)
+        print "POST:",title
+        print "RETURN:",retPost
+      else:
+        # if date of source is newer , modify the target post
+        item_target = map_title_target[title]
+        assert "date" in item and "date" in item_target , \
+               "date property not found in source or target item"
+        date_source = dateutil.parser.parse(item["date"]) \
+                      if type(item["date"]) != datetime.datetime \
+                      else item["date"]
+        date_target = dateutil.parser.parse(item_target["date"]) \
+                      if type(item_target["date"]) != datetime.datetime \
+                      else item_target["date"]
+        if date_source.replace(tzinfo=None) > date_target.replace(tzinfo=None):
+          # update
+          if enhance_source:
+            item = enhance_source(item)
+          params_target = self.buildTargetParams(item)
+          if "title" in params_target:
+            del params_target["title"]
+          params_target["item"] = item_target
+          retEdit = edit_target(params_target)
+          print "EDIT:",title
+          print "RETURN:",retEdit
     return True
 
   def run(self):
