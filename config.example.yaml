@@ -1,0 +1,13 @@
+- mode: sync_by_title_date
+  source: 
+    service: evernote
+    shared_url: "https://www.evernote.com/pub/zomux/anotemydiary" 
+
+  target:
+    service: wordpress
+    xmlrpc_url: "http://rafa.blog.cd/xmlrpc.php"
+    username: "admin"
+    password: "rafa$ch82"
+    title: "{title}"
+    content: "{content}"
+    categories: "dairy"
