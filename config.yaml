@@ -1,4 +1,4 @@
-- mode: forward_by_title
+- mode: sync_by_title_date
   source: 
     service: evernote
     shared_url: "https://www.evernote.com/pub/zomux/anotemydiary" 
@@ -12,7 +12,7 @@
     content: "{content}"
     categories: "dairy"
 
-- mode: forward_by_title
+- mode: sync_by_title_date
   source: 
     service: evernote
     shared_url: "https://www.evernote.com/pub/zomux/anotemyidea" 
@@ -26,7 +26,7 @@
     content: "{content}"
     categories: "idea"
 
-- mode: forward_by_title
+- mode: sync_by_title_date
   source: 
     service: evernote
     shared_url: "https://www.evernote.com/pub/zomux/anotestudy" 
@@ -40,7 +40,7 @@
     content: "{content}"
     categories: "Study"
 
-- mode: forward_by_title
+- mode: sync_by_title_date
   source: 
     service: evernote
     shared_url: "https://www.evernote.com/pub/zomux/anotework" 
@@ -54,7 +54,7 @@
     content: "{content}"
     categories: "General Work"
 
-- mode: forward_by_title
+- mode: sync_by_title_date
   source: 
     service: evernote
     shared_url: "https://www.evernote.com/pub/zomux/anotesmt" 

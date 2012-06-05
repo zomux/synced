@@ -18,6 +18,7 @@ class Worker:
   mode = None
   moduleSource = None
   moduleTarget = None
+  debug = False
   _mapModeRequiredAction = {
     "forward_by_title":("fetch","fetch,post"),
     "forward_by_date":("fetch","fetch,post"),
@@ -110,7 +111,7 @@ class Worker:
     items_source = fetch_source(self.source)
     items_target = fetch_target(self.target)
     # to limit items to post , the forward_by_title will run under control
-    items_source = items_source[:len(items_target)/2]
+    items_source = items_source[:len(items_target)/2+1]
     items_source.reverse()
     titles_target = [self.cleanTitle(x["title"]) for x in items_target]
     for item in items_source:
@@ -137,9 +138,16 @@ class Worker:
     items_source = fetch_source(self.source)
     items_target = fetch_target(self.target)
     # to limit items to post , the sync_by_title_date will run under control
-    items_source = items_source[:len(items_target)+1]
+    items_source = items_source[:len(items_target)/2+1]
     items_source.reverse()
-    
+
+    if self.debug:
+      print "---SRC---"
+      print "\n".join([i["title"] for i in items_source])
+      print "---TGT---"
+      print "\n".join([i["title"] for i in items_target])
+      print "---------"
+
     map_title_target = {}
     for item_target in items_target:
       map_title_target[self.cleanTitle(item_target["title"])] = item_target
@@ -149,6 +157,9 @@ class Worker:
       item["title"] = title
       if title not in map_title_target:
         # post for unfound post
+        if self.debug:
+            print "[P]", item["title"]
+            continue
         if enhance_source:
           item = enhance_source(item)
         params_target = self.buildTargetParams(item)
@@ -168,6 +179,9 @@ class Worker:
                       else item_target["date"]
         if date_source.replace(tzinfo=None) > date_target.replace(tzinfo=None):
           # update
+          if self.debug:
+            print "[E]", item["title"]
+            continue
           if enhance_source:
             item = enhance_source(item)
           params_target = self.buildTargetParams(item)
