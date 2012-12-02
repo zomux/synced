@@ -5,9 +5,9 @@
 
   target:
     service: wordpress
-    xmlrpc_url: "http://rafa.blog.cd/xmlrpc.php"
-    username: "admin"
-    password: "rafa$ch82"
+    xmlrpc_url: "http://xxx.wordpressblog.com/xmlrpc.php"
+    username: "username"
+    password: "password"
     title: "{title}"
     content: "{content}"
     categories: "dairy"
